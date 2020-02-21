@@ -21,14 +21,17 @@ extension PostListTarget: TargetType {
     }
 
     var baseURL: URL {
-        return URL(string: "https://hn.algolia.com?")!
+        let urlString: String
+        switch self {
+        case let .getPostList(page):
+            urlString = "https://hn.algolia.com/api/v1/search_by_date?tags=story&page=\(page)"
+        }
+        return URL(string: urlString)!
     }
 
     var path: String {
-        switch self {
-        case let .getPostList(page):
-            return "/api/v1/search_by_date?tags=story&page=\(page)"
-        }
+
+        return "/"
     }
 
     internal var parameters: Parameters? {

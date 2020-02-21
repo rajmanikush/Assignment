@@ -17,10 +17,6 @@ internal class DefaultPostListUseCase: PostListUseCase {
     internal func getPostList() -> Observable<PostListResponse> {
         return NetworkManager<PostListTarget>()
             .request(.getPostList(page: 1))
-            .map { (response) -> Response in
-                print(String(data: response.data, encoding: .utf8))
-                return response
-            }
             .map(PostListResponse.self, atKeyPath: nil)
     }
 }
