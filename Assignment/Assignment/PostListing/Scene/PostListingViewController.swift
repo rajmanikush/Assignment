@@ -36,6 +36,7 @@ internal final class PostListingViewController: UIViewController {
                                                refreshTrigger: refreshTrigger.asDriver(onErrorJustReturn: ()),
                                                didSelectTrigger: didSelectTrigger.asDriver(onErrorJustReturn: 0))
         let output = viewModel.transform(input: input)
+        
         output.orderList
             .drive(onNext: { [weak self] posts in
                 self?.tableView.reloadData()
@@ -57,6 +58,10 @@ extension PostListingViewController: UITableViewDelegate, UITableViewDataSource 
         }
         cell.bindView(post: viewModel.postList[indexPath.row])
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        didSelectTrigger.onNext(indexPath.row)
     }
 }
 

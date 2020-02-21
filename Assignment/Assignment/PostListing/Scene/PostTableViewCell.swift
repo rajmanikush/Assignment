@@ -10,6 +10,10 @@ import UIKit
 
 class PostTableViewCell: UITableViewCell {
 
+    @IBOutlet private var titleLabel: UILabel!
+    @IBOutlet private var createdAtLabel: UILabel!
+    @IBOutlet private var switchSelection: UISwitch!
+
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -17,12 +21,11 @@ class PostTableViewCell: UITableViewCell {
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
     }
     
     internal func bindView(post: Post) {
-        
+        titleLabel.text = post.title
+        createdAtLabel.text = post.createdAt
+        switchSelection.isOn = post.isSelected
     }
-
 }
