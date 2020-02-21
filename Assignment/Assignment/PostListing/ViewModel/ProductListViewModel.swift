@@ -80,7 +80,6 @@ internal final class ProductListViewModel: ViewModelType {
             }
             return total
         }
-        
     
         return Output(
             orderList: orderList,

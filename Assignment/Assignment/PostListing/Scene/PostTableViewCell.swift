@@ -10,38 +10,20 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-class PostTableViewCell: UITableViewCell {
+internal final class PostTableViewCell: UITableViewCell {
 
+    // MARK: - IBOutlets and Variables
+    
     @IBOutlet private var titleLabel: UILabel!
     @IBOutlet private var createdAtLabel: UILabel!
     @IBOutlet private var switchSelection: UISwitch!
-
-    private let switchSubject = PublishSubject<Bool>()
-    internal var switchTrigger: Driver<Bool> {
-        return switchSubject.asDriver(onErrorJustReturn: false)
-    }
-    internal let disposeBag = DisposeBag()
-
     
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        // Initialization code
-    }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-    }
+    // MARK: - Methods
     
     internal func bindView(post: Post) {
         titleLabel.text = post.title
         createdAtLabel.text = getFormattedDate(from: post.createdAt)
         switchSelection.isOn = post.isSelected ?? false
-        
-        switchSelection.rx.controlEvent(.valueChanged).asDriver().drive(onNext: { [weak self] _ in
-            guard let self = self else { return }
-            self.switchSelection.isOn = !self.switchSelection.isOn
-            self.switchSubject.onNext(self.switchSelection.isOn)
-        }).disposed(by: disposeBag)
     }
     
     private func getFormattedDate(from string: String) -> String? {

@@ -15,8 +15,10 @@ internal protocol PostListUseCase {
 
 internal class DefaultPostListUseCase: PostListUseCase {
     internal func getPostList(page: Int) -> Observable<PostListResponse> {
+        
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase
+        
         return NetworkManager<PostListTarget>()
             .request(.getPostList(page: page))
             .map(PostListResponse.self, atKeyPath: nil, using: decoder)

@@ -12,6 +12,8 @@ import RxCocoa
 
 internal final class PostListingViewController: UIViewController {
 
+    // MARK: - IBOutlets and Variables
+
     @IBOutlet private var tableView: UITableView!
     private var refreshControl = UIRefreshControl()
 
@@ -32,7 +34,8 @@ internal final class PostListingViewController: UIViewController {
            tableView.addSubview(refreshControl)
     }
     
-    @objc func refresh(sender:AnyObject) {
+    @objc private func refresh(sender:AnyObject) {
+        title = nil
         refreshTrigger.onNext(())
     }
    
@@ -72,29 +75,29 @@ internal final class PostListingViewController: UIViewController {
     }
 }
 
+// MARK: - TableView Methods
+
 extension PostListingViewController: UITableViewDelegate, UITableViewDataSource {
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    internal func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewModel.postList.count
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    internal func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: PostTableViewCell.reuseID, for: indexPath) as? PostTableViewCell else {
             assertionFailure("Unable to find Post TableView Cell")
             return UITableViewCell()
         }
         cell.bindView(post: viewModel.postList[indexPath.row])
-        cell.switchTrigger.drive(onNext: { [weak self] _ in
-            self?.didSelectTrigger.onNext(indexPath.row)
-        }).disposed(by: cell.disposeBag)
         return cell
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    internal func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         didSelectTrigger.onNext(indexPath.row)
     }
     
-    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+    /// We could have used prefetch Data source method but we need to support the project till iOS 8 so using the older way for this.
+    internal func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if indexPath.row == viewModel.postList.count - 1 {
             loadMoreTrigger.onNext(())
         }
