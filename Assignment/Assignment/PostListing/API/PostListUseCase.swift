@@ -10,15 +10,15 @@ import RxCocoa
 import RxSwift
 
 internal protocol PostListUseCase {
-    func getPostList() -> Observable<PostListResponse>
+    func getPostList(page: Int) -> Observable<PostListResponse>
 }
 
 internal class DefaultPostListUseCase: PostListUseCase {
-    internal func getPostList() -> Observable<PostListResponse> {
+    internal func getPostList(page: Int) -> Observable<PostListResponse> {
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase
         return NetworkManager<PostListTarget>()
-            .request(.getPostList(page: 1))
+            .request(.getPostList(page: page))
             .map(PostListResponse.self, atKeyPath: nil, using: decoder)
     }
 }

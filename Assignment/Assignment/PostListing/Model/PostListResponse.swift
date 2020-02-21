@@ -27,5 +27,5 @@ struct Post: Decodable {
     internal let storyTitle: String?
     internal let storyUrl: String?
     internal let createdAt: String
-    internal var isSelected: Bool = false
+    internal var isSelected: Bool? = false
 }
